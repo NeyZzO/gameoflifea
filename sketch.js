@@ -3,6 +3,10 @@ var board, next;
 var gen = false;
 var framerate = 30;
 w = 15;
+var startingBoard;
+var counter = 0;
+const iterations = document.getElementById('iterations');
+const boardStats = document.getElementById('board');
 
 function setup() {
     frameRate(framerate);
@@ -10,6 +14,7 @@ function setup() {
     columns = Math.floor(width / w);
     rows = Math.floor(height / w);
     randomTable();
+    displayBoardStats();
 }
 
 function generateBlank() {
@@ -27,6 +32,9 @@ function generateBlank() {
             next[i][j] = 0;
         }
     }
+    startingBoard = JSON.parse(JSON.stringify(board))
+    clearIterations();
+
 }
 
 function randomTable() {
@@ -45,12 +53,15 @@ function randomTable() {
                 board[i][j] = 0;
         }
     }
+    startingBoard = JSON.parse(JSON.stringify(board))
+    clearIterations();
 }
 
 function draw() {
     background(255);
     if (gen) {
         generate();
+        counter ++
     }
     for (let i = 0; i < columns; i++) {
         for (let j = 0; j < rows; j++) {
@@ -63,6 +74,7 @@ function draw() {
             rect(i * w, j * w, w, w);
         }
     }
+    iterations.innerText = `Itérations : ${counter}`
 }
 
 function generate() {
@@ -91,7 +103,7 @@ function generate() {
 
 document.addEventListener("keyup", (e) => {
     if (e.keyCode == 32) {
-        gen = !gen;
+        changeState()
     }
 });
 
@@ -107,4 +119,54 @@ function mousePressed() {
     let sCol = Math.floor(my / w);
     board[sRow][sCol] = Math.abs(board[sRow][sCol] - 1);
     draw();
+}
+
+const changeState = () => {
+    gen = !gen;
+    if(gen){
+        changeStatebtn.setAttribute('title',  "pause");
+        changeStatebtn.innerHTML = icons['play'];
+    } else if(!gen){
+        changeStatebtn.setAttribute('title', "play");
+        changeStatebtn.innerHTML = icons['pause'];
+    }
+}
+
+const icons = {
+    'play': `<i class="fa-solid fa-pause"></i>`,
+    'pause': `<i class="fa-solid fa-play"></i>`
+}
+const changeStatebtn = document.querySelector('#changeState');
+const restartBTN = document.getElementById('restart')
+const randomTableBtn = document.getElementById('generateRandom');
+const clearBtn = document.getElementById('clearBoard');
+
+clearBtn.addEventListener('click', generateBlank);
+changeStatebtn.addEventListener('click',changeState);
+randomTableBtn.addEventListener('click', randomTable);
+restartBTN.addEventListener('click', () => {
+    board = JSON.parse(JSON.stringify(startingBoard));
+    clearIterations();
+})
+
+const clearIterations = () => {
+    counter = 0;
+}
+const displayBoardStats = () => {
+    let col = board.length;
+    let rows = board[0].length;
+    let text = `Columns : ${col}, Rows : ${rows}, Side : ${w}px`
+    boardStats.innerText = text;
+}
+
+const getJsonTable = () => {
+    console.log(JSON.stringify(board))
+}
+const loadTable = () => {
+    fetch('./presets/glidergun.json').then((r) => r.json()).then(json => {
+        let temp = json.cells;
+        console.table(temp);
+        board = JSON.parse(JSON.stringify(temp));
+    
+    });
 }

@@ -6,9 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
-    <script src="sketch.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    
+    <main></main>
+    <button id="changeState" class="action pause" title='Play'><i class="fa-solid fa-play"></i></button>
+    <button class="action" id="generateRandom" title="Generate a random board"><i class="fa-solid fa-shuffle"></i></button>
+    <button class="action" id="restart" title="Revert the board to the start"><i class="fa-solid fa-rotate-left"></i></button>
+    <button class="action" id="clearBoard" title="Clear the board"><i class="fa-solid fa-trash"></i></button>
+    <button class="action "id="preset" title="Choose a preset"><i class="fa-solid fa-cube"></i></button>
+    <div class="stats">
+        <p id="iterations"></p>
+        <p>|</p>
+        <p id="board"></p>
+    </div>
+    <script src="sketch.js"></script>
 </body>
 </html>
